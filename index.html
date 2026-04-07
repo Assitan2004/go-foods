@@ -154,7 +154,7 @@
         .navbar.scrolled .nav-right a:not(.btn-login) { color: #000; }
 
         .btn-login {
-            background: #000;
+            background: transparent;
             border: 1px solid #fff;
             padding: 12px 30px;
             border-radius: 50px;
@@ -640,6 +640,162 @@ footer {
         text-align: center;
     }
 }
+
+/* --- SECTION DOWNLOAD B&W (FOND BLANC) --- */
+.app-bw-section-white {
+    background: #ffffff;
+    color: #000000;
+    padding: 120px 0;
+    font-family: var(--font-main);
+    border-top: 1px solid #eee;
+}
+
+.app-bw-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    align-items: center;
+    gap: 100px;
+}
+
+.app-bw-text h2 {
+    font-family: var(--font-main);
+    font-weight: 800;
+    font-size: clamp(2.7rem, 5vw, 4rem);
+    line-height: 0.95;
+    letter-spacing: -4px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    color: #000;
+}
+
+.app-bw-text h2 span {
+    display: block;
+    color: #000;
+}
+
+.app-bw-text p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #000;
+    max-width: 480px;
+    margin-bottom: 60px;
+}
+
+.bw-btn-group {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-bw-dark {
+    background: #000;
+    color: #fff;
+    padding: 20px 35px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s ease;
+    border: 2px solid #000;
+    border-radius: 2px;
+}
+
+.btn-bw-dark.outline {
+    background: transparent;
+    color: #000;
+}
+
+.btn-bw-dark:hover {
+    background: transparent;
+    color: #000;
+}
+
+.btn-bw-dark.outline:hover {
+    background: #000;
+    color: #fff;
+}
+
+.app-bw-visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.bw-phone-frame-white {
+    width: 300px;
+    height: 600px;
+    background: #000; /* Le fond du cadre est noir */
+    border: 6px solid #000; /* Contour noir plus marqué */
+    border-radius: 40px;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.1);
+}
+
+.bw-phone-frame-white img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* filter: grayscale(1);  <-- LIGNE SUPPRIMÉE POUR GARDER LA COULEUR */
+    opacity: 1; /* Opacité au maximum pour bien voir les couleurs */
+}
+
+.bw-stat-badge-black {
+    position: absolute;
+    top: 50px;
+    right: -40px;
+    background: #000;
+    color: #fff;
+    padding: 25px;
+    border-radius: 2px;
+    z-index: 3;
+    text-align: center;
+}
+
+.bw-stat-badge-black .big-num {
+    font-size: 2.8rem;
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1;
+    display: block;
+}
+
+.bw-stat-badge-black .label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    opacity: 0.7;
+}
+
+@media (max-width: 1024px) {
+    .app-bw-container { grid-template-columns: 1fr; text-align: center; gap: 60px; padding: 0 2rem; }
+    .bw-btn-group { justify-content: center; }
+    .bw-stat-badge-black { right: 50%; transform: translateX(50%); top: -40px; }
+}
+/* --- ANIMATIONS DE DEFILEMENT --- */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Délai pour les éléments en grille (effet cascade) */
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
     </style>
 </head>
 <body>
@@ -679,58 +835,58 @@ footer {
 
         <div class="hero-content">
             <p style="font-family: var(--font-serif); font-style: italic; font-size: 1.5rem; margin-bottom: 10px;">L'art de la haute gastronomie</p>
-            <h1 class="hero-title">Gourmet Live</h1>
+            <h1 class="hero-title">Go Foods Live</h1>
             <p style="letter-spacing: 8px; text-transform: uppercase; font-size: 1.1rem;">L'excellence livrée à votre porte</p>
         </div>
     </header>
 
     <section class="agro-mission">
-        <div class="container">
-            <div class="mission-header">
-                <div class="mission-title-block">
-                    <span class="badge-pill">L'Agriculture Panafricaine IA</span>
-                    <h2 class="main-heading">Apporter la <br><span class="gradient-text-green">Technologie</span> <br>à l'Agriculture</h2>
-                </div>
-                <div class="mission-text-block">
-                    <p class="mission-description">
-                        Nous autonomisons les agriculteurs et les entreprises avec des solutions IA intelligentes pour bâtir un avenir agricole résilient et souverain.
-                    </p>
-                    <a href="#" class="btn-learn-more">
-                        En savoir plus 
-                        <span class="arrow-circle">
-                            <span class="material-symbols-outlined" style="font-size: 20px;">north_east</span>
-                        </span>
-                    </a>
+    <div class="container">
+        <div class="mission-header">
+            <div class="mission-title-block">
+                <span class="badge-pill">Vision Go Foods 2026</span>
+                <h2 class="main-heading">Connecter l'Écosystème <br><span class="gradient-text-green">Logistique</span> <br>Ivoirien</h2>
+            </div>
+            <div class="mission-text-block">
+                <p class="mission-description">
+                    Porté par <strong>OUATTARA Arouna</strong>, Gourmet Live est une plateforme évolutive conçue pour connecter efficacement clients, commerçants et coursiers à travers une solution technologique de pointe.
+                </p>
+                <a href="#" class="btn-learn-more">
+                    Découvrir le projet 
+                    <span class="arrow-circle">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">north_east</span>
+                    </span>
+                </a>
+            </div>
+        </div>
+
+        <div class="impact-grid">
+            <div class="impact-card image-card">
+                <img src="r1.jpg" alt="Livraison Gourmet Live">
+            </div>
+            
+            <div class="impact-card stats-card gray-light">
+                <div class="stat-number">MVP</div>
+                <div class="stat-content">
+                    <h3>Solution Évolutive</h3>
+                    <p>Une architecture conçue pour passer de la livraison de nourriture aux colis, courses et meubles.</p>
                 </div>
             </div>
 
-            <div class="impact-grid">
-                <div class="impact-card image-card">
-                    <img src="r1.jpg" alt="Livreur">
-                </div>
-                
-                <div class="impact-card stats-card gray-light">
-                    <div class="stat-number">+30%</div>
-                    <div class="stat-content">
-                        <h3>Pilier Économique</h3>
-                        <p>L'agriculture représente plus de 30% du PIB sur le continent.</p>
-                    </div>
-                </div>
+            <div class="impact-card image-card">
+                <img src="r3.jpg" alt="Logistique Intelligente">
+            </div>
 
-                <div class="impact-card image-card">
-                    <img src="r3.jpg" alt="Récolte">
-                </div>
-
-                <div class="impact-card stats-card green-gradient-card">
-                    <div class="stat-number">-30%</div>
-                    <div class="stat-content">
-                        <h3>Zéro Gaspillage</h3>
-                        <p>Réduire de 30% les pertes post-récoltes grâce à l'IA.</p>
-                    </div>
+            <div class="impact-card stats-card green-gradient-card">
+                <div class="stat-number">95%</div>
+                <div class="stat-content">
+                    <h3>Objectif Qualité</h3>
+                    <p>Nous visons un taux de traitement optimal pour garantir la satisfaction de chaque acteur du réseau.</p>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <main class="bakery-grid">
         <div class="pastry-card">
@@ -747,7 +903,7 @@ footer {
             <div class="image-container">
                 <img src="t1.jpg" class="pastry-image" alt="Poisson">
                 <div class="overlay-voir-plus">
-                    <p>Saumon Royal</p>
+                    <p>Tacos</p>
                     <a href="#" class="btn-plus">Déguster</a>
                 </div>
             </div>
@@ -755,9 +911,9 @@ footer {
 
         <div class="pastry-card">
             <div class="image-container">
-                <img src="b1.jpg" class="pastry-image" alt="Thiep" >
+                <img src="b1.jpg" class="pastry-image" alt="burger" >
                 <div class="overlay-voir-plus">
-                    <p>Thieboudienne</p>
+                    <p>Burger</p>
                     <a href="#" class="btn-plus">Déguster</a>
                 </div>
             </div>
@@ -767,7 +923,7 @@ footer {
             <div class="image-container">
                 <img src="t2.jpg" class="pastry-image" alt="Alloco">
                 <div class="overlay-voir-plus">
-                    <p>Poisson Aloco</p>
+                    <p>Chawarma</p>
                     <a href="#" class="btn-plus">Déguster</a>
                 </div>
             </div>
@@ -777,7 +933,7 @@ footer {
             <div class="image-container">
                 <img src="f.png" class="pastry-image" alt="Choukouya">
                 <div class="overlay-voir-plus">
-                    <p>Choukouya</p>
+                    <p>Poulet</p>
                     <a href="#" class="btn-plus">Déguster</a>
                 </div>
             </div>
@@ -787,7 +943,7 @@ footer {
             <div class="image-container">
                 <img src="e.png" class="pastry-image" alt="Riz Rouge">
                 <div class="overlay-voir-plus">
-                    <p>Riz Rouge</p>
+                    <p>Entrée</p>
                     <a href="#" class="btn-plus">Déguster</a>
                 </div>
             </div>
@@ -799,41 +955,90 @@ footer {
         
         <div class="faq-item">
             <button class="faq-question">
-                VOS PRODUITS CONVIENNENT-ILS AUX PERSONNES ALLERGIQUES AUX NOIX ?
+                QUELS TYPES DE PRODUITS PUIS-JE FAIRE LIVRER VIA LA PLATEFORME ?
                 <i class="fas fa-chevron-down faq-icon"></i>
             </button>
             <div class="faq-answer">
-                <p>Bien que nous prenions des précautions extrêmes, nos produits sont fabriqués dans un atelier manipulant quotidiennement des fruits à coque.</p>
+                <p>Gourmet Live est une solution logistique multi-catégories unique en Côte d'Ivoire. Si notre service a débuté par la haute gastronomie, notre architecture évolutive permet désormais de transporter une large gamme de produits : repas chauds, colis urgents, plis administratifs, courses de supermarché, et même des articles volumineux comme du mobilier. Notre objectif est de devenir votre partenaire unique pour tous vos besoins de mobilité urbaine.</p>
             </div>
         </div>
 
         <div class="faq-item">
             <button class="faq-question">
-                EST-CE QUE TOUS LES PRODUITS GOURMET SONT ADAPTÉS AUX VÉGÉTALIENS ?
+                PROPOSEZ-VOUS UN SERVICE DE LIVRAISON DE COLIS ENTRE PARTICULIERS ?
                 <i class="fas fa-chevron-down faq-icon"></i>
             </button>
             <div class="faq-answer">
-                <p>Nous proposons une sélection "Végé-Gourmet" dédiée. Les ingrédients sont précisés sur chaque fiche produit pour une transparence totale.</p>
+                <p>Absolument. Nous comprenons l'importance de la réactivité dans votre quotidien. Gourmet Live propose un service "Coursier Express" dédié aux échanges entre particuliers. Que vous ayez besoin d'envoyer un trousseau de clés, de récupérer un chargeur oublié ou de faire livrer un cadeau à un proche, nos coursiers géolocalisés interviennent en un temps record pour assurer un transfert sécurisé de porte à porte.</p>
             </div>
         </div>
 
         <div class="faq-item">
             <button class="faq-question">
-                PUIS-JE COMMANDER EN LIGNE ET RÉCUPÉRER MA COMMANDE EN BOUTIQUE ?
+                EST-IL POSSIBLE DE SUIVRE MA COMMANDE EN TEMPS RÉEL ?
                 <i class="fas fa-chevron-down faq-icon"></i>
             </button>
             <div class="faq-answer">
-                <p>Oui, notre service "Click & Collect" est disponible dans tous nos points de vente GourmetLive en Côte d'Ivoire.</p>
+                <p>La transparence est au cœur de notre technologie. Dès que votre commande est acceptée par un restaurant ou un commerçant et attribuée à un coursier, vous recevez un lien de suivi interactif. Grâce à l'application Go Foods, vous pouvez visualiser la position exacte de votre livreur sur une carte en temps réel, consulter l'estimation précise de son heure d'arrivée et communiquer directement avec lui en cas de besoin.</p>
             </div>
         </div>
 
         <div class="faq-item">
             <button class="faq-question">
-                OÙ SONT FABRIQUÉS VOS PRODUITS ?
+                QUELS SONT LES MODES DE PAIEMENT SÉCURISÉS DISPONIBLES ?
                 <i class="fas fa-chevron-down faq-icon"></i>
             </button>
             <div class="faq-answer">
-                <p>Tous nos plats sont cuisinés avec passion dans nos cuisines centrales situées à Abidjan, à partir de produits frais et locaux.</p>
+                <p>Pour s'adapter aux habitudes de chaque utilisateur ivoirien, nous proposons un écosystème de paiement hybride et hautement sécurisé. Vous pouvez régler vos commandes via carte bancaire (Visa/Mastercard), utiliser les solutions de Mobile Money leaders sur le marché (Orange, MTN, Moov Money, Wave), ou opter pour le paiement en espèces lors de la réception de votre colis. Toutes les transactions numériques sont protégées par un protocole de cryptage avancé.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                COMMENT REJOINDRE LE RÉSEAU DES COURSIERS OU DES COMMERÇANTS ?
+                <i class="fas fa-chevron-down faq-icon"></i>
+            </button>
+            <div class="faq-answer">
+                <p>Gourmet Live offre des opportunités de croissance pour tous. Pour les coursiers, l'inscription se fait via l'application Go Foods avec un processus de vérification rigoureux (identité, véhicule, casier judiciaire). Pour les restaurants et commerçants, nous mettons à disposition un Dashboard complet pour gérer vos stocks et analyser vos ventes. Nous visons un taux de disponibilité de 99,5% pour garantir la continuité de vos revenus.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                QUELLE EST LA VISION DERRIÈRE LE PROJET GOURMET LIVE ?
+                <i class="fas fa-chevron-down faq-icon"></i>
+            </button>
+            <div class="faq-answer">
+                <p>Initié et développé sous l'impulsion de <strong>OUATTARA Arouna</strong>, Gourmet Live n'est pas seulement une application de livraison, c'est une vision stratégique pour la Côte d'Ivoire. Notre ambition est de bâtir un écosystème logistique souverain, capable de soutenir l'économie locale en connectant intelligemment les acteurs de la consommation. Nous misons sur la technologie MVP évolutive pour répondre aux défis de demain.</p>
+            </div>
+        </div>
+
+    </div>
+</section>   <section class="app-bw-section-white">
+    <div class="app-bw-container">
+        
+        <div class="app-bw-text">
+            <h2>Go Foods <span>L'Application.</span></h2>
+            <p>L'excellence culinaire de GourmetLive. Commandez en un clic auprès des meilleurs chefs, suivez votre livraison et savourez l'instant.</p>
+            
+            <div class="bw-btn-group">
+                <a href="#" class="btn-bw-dark">
+                    <i class="fab fa-apple"></i> App Store
+                </a>
+                <a href="#" class="btn-bw-dark outline">
+                    <i class="fab fa-google-play"></i> Google Play
+                </a>
+            </div>
+        </div>
+
+        <div class="app-bw-visual">
+            <div class="bw-phone-frame-white">
+                <img src="p1.jpg" alt="Interface Go Foods">
+            </div>
+            
+            <div class="bw-stat-badge-black">
+                <span class="big-num">4.9</span>
+                <span class="label">Satisfaction</span>
             </div>
         </div>
 
@@ -846,10 +1051,11 @@ footer {
         </div>
         <div id="map"></div>
     </section>
+ 
 <footer>
     <div class="footer-container">
         <div class="footer-brand">
-            <a href="#" class="footer-logo">Gourmet Live</a>
+            <a href="#" class="footer-logo">Go Foods</a>
             <p>L'excellence logistique au service de votre quotidien. Une vision multi-catégories pour connecter clients, commerçants et coursiers à travers une expérience unique.</p>
         </div>
 
@@ -908,6 +1114,8 @@ footer {
 </footer>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
+
+        
         // Initialisation de la carte centrée sur la Côte d'Ivoire
         const map = L.map('map', {
             scrollWheelZoom: false
@@ -953,6 +1161,7 @@ footer {
 
         // Correction pour s'assurer que Leaflet calcule bien les dimensions après le rendu
         window.onload = () => { map.invalidateSize(); };
+        
     </script>
 </body>
 </html>
