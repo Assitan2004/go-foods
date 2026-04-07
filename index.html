@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GourmetLive | L'Excellence à votre table</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700" rel="stylesheet"/>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        :root {
+            --white: #ffffff;
+            --accent: #e67e22;
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+            --text-dark: #1A1A1A;
+            --bg-gray: #f8f9fa;
+            --green-lime: #000; 
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: var(--font-main); 
+            background: #ffffff; 
+            color: var(--text-dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero-section {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.55) 100%);
+            z-index: 1;
+        }
+
+        .video-bg { 
+            position: absolute; 
+            inset: 0; 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            z-index: 0;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            position: fixed;
+            top: 0; width: 100%;
+            z-index: 1000;
+            padding: 2.5rem 0;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            background: transparent;
+        }
+
+        .navbar.scrolled { 
+            padding: 0.8rem 0; 
+            background: #ffffff; 
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .nav-container { 
+            display: grid; 
+            grid-template-columns: 1fr auto 1fr; 
+            align-items: center; 
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 4rem;
+        }
+
+        .nav-left { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            font-size: 0.75rem; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            font-weight: 700; 
+            color: #fff;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .navbar.scrolled .nav-left { color: #000; }
+        
+        .logo-section { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            text-decoration: none;
+        }
+        
+        .logo-box { 
+            background: var(--white); 
+            padding: 8px 10px; 
+            border-radius: 2px; 
+            display: flex;
+            transition: 0.3s;
+        }
+
+        .navbar.scrolled .logo-box { background: #000; }
+        .navbar.scrolled .logo-box i { color: #fff !important; }
+
+        .logo-text { 
+            font-family: var(--font-main);
+            font-weight: 800; 
+            font-size: 1.2rem; 
+            letter-spacing: 6px; 
+            color: var(--white); 
+            margin-top: 8px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .navbar.scrolled .logo-text { color: #000; }
+
+        .nav-right { 
+            display: flex; 
+            justify-content: flex-end; 
+            align-items: center; 
+            gap: 25px; 
+        }
+
+        .nav-right a { 
+            text-decoration: none; 
+            color: var(--white); 
+            font-size: 0.75rem; 
+            text-transform: uppercase; 
+            letter-spacing: 2px;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+
+        .navbar.scrolled .nav-right a:not(.btn-login) { color: #000; }
+
+        .btn-login {
+            background: #000;
+            border: 1px solid #fff;
+            padding: 12px 30px;
+            border-radius: 50px;
+            color: var(--white) !important;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled .btn-login {
+            background: #000;
+            border-color: #000;
+        }
+
+        .sub-nav {
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled .sub-nav { opacity: 0; transform: translateY(10px); pointer-events: none; }
+
+        .sub-nav a {
+            text-decoration: none;
+            color: rgba(255,255,255,0.9); 
+            font-size: 0.7rem; 
+            text-transform: uppercase;
+            letter-spacing: 2.5px; 
+            font-weight: 600;
+        }
+
+        /* --- HERO CONTENT --- */
+        .hero-content { 
+            position: relative; 
+            z-index: 10; 
+            text-align: center;
+            color: #fff;
+            animation: fadeIn 1.8s ease-out;
+        }
+
+        .hero-title { 
+            font-family: var(--font-serif);
+            font-size: clamp(3.5rem, 11vw, 8rem); 
+            font-weight: 400; 
+            line-height: 0.9; 
+            margin-bottom: 2.5rem; 
+            letter-spacing: -2px; 
+        }
+
+        /* --- GRILLE PRODUITS UNIFORME --- */
+        .bakery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+            background: #fff;
+        }
+
+        .pastry-card {
+            background: var(--white);
+            transition: transform 0.3s ease;
+        }
+
+        .image-container {
+            background-color: #fff;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .pastry-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: block;
+        }
+
+        .overlay-voir-plus {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 2;
+        }
+
+        .overlay-voir-plus p {
+            font-weight: 700;
+            color: #fff;
+            font-size: 1.3rem;
+        }
+
+        .btn-plus {
+            color: #fff;
+            padding-bottom: 2px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-bottom: 1px solid #fff;
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
+            text-decoration: none;
+        }
+
+        .pastry-card:hover .overlay-voir-plus { opacity: 1; }
+        .pastry-card:hover .btn-plus { transform: translateY(0); }
+        .pastry-card:hover .pastry-image { transform: scale(1.1); }
+
+        /* --- AGRO MISSION --- */
+        .agro-mission {
+            padding: 60px 0;
+            background: #ffffff;
+            width: 100%;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+        .mission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            gap: 40px;
+        }
+
+        .mission-title-block { flex: 1; }
+        
+        .badge-pill {
+            display: inline-block;
+            padding: 6px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .main-heading {
+            font-family: var(--font-main);
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            color: var(--text-dark);
+        }
+
+        .gradient-text-green {
+            background: #000;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .mission-text-block { flex: 1; padding-top: 0; }
+        
+        .mission-description {
+            font-size: 1.1rem;
+            line-height: 1.4;
+            color: var(--text-dark);
+            font-weight: 400;
+            margin-bottom: 25px;
+            max-width: 500px;
+        }
+
+        .btn-learn-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 8px 8px 20px;
+            background: var(--green-lime);
+            border-radius: 100px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .arrow-circle {
+            width: 35px; height: 35px;
+            background: #000; color: #fff;
+            border-radius: 50%; display: flex;
+            align-items: center; justify-content: center;
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .impact-card {
+            height: 280px;
+            border-radius: 25px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px;
+            transition: transform 0.4s ease;
+        }
+
+        .impact-card:hover { transform: translateY(-5px); }
+        .image-card { padding: 0; }
+        .image-card img { width: 100%; height: 100%; object-fit: cover; }
+        .gray-light { background-color: var(--bg-gray); }
+        .green-gradient-card { background: #F9F9F9; color: #1A1A1A; }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -3px;
+            line-height: 1;
+        }
+
+        .stats-card h3 { font-size: 1rem; font-weight: 800; margin-bottom: 8px; }
+        .stats-card p { font-size: 0.9rem; line-height: 1.4; opacity: 0.85; }
+
+        /* --- SECTION FAQ --- */
+.faq-section {
+    padding: 100px 0;
+    background: #fff;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.faq-section h2 {
+    font-family: var(--font-serif);
+    font-size: 2.8rem;
+    margin-bottom: 50px;
+    padding: 0 2rem;
+    font-weight: 600;
+    letter-spacing: -1px;
+}
+
+.faq-container {
+    border-top: 1px solid #eee;
+}
+
+.faq-item {
+    border-bottom: 1px solid #eee;
+    padding: 0 2rem;
+}
+
+.faq-question {
+    width: 100%;
+    padding: 35px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    background: none;
+    border: none;
+    text-align: left;
+    font-family: var(--font-main);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #000;
+    transition: var(--transition);
+    font-weight: 700;
+}
+
+.faq-question:hover {
+    color: #1A1A1A;
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0, 1, 0, 1);
+    color:#1A1A1A;
+    font-size: 1.05rem;
+    line-height: 1.7;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 500px;
+    padding-bottom: 35px;
+    transition: all 0.5s cubic-bezier(1, 0, 1, 0);
+}
+
+.faq-icon {
+    transition: transform 0.4s ease;
+    font-size: 0.9rem;
+}
+
+.faq-item.active .faq-icon {
+    transform: rotate(180deg);
+}
+
+        /* --- SECTION CARTE (EN BAS) --- */
+        .map-section {
+            padding: 80px 0;
+            background: #fff;
+            border-top: 1px solid #eee;
+        }
+
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto 30px auto;
+            padding: 0 2rem;
+        }
+
+        .map-header h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -1.5px;
+        }
+
+        .map-header a {
+            color: #000;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: underline;
+        }
+
+        #map {
+            width: 100%;
+            height: 500px;
+            z-index: 5;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1100px) {
+            .impact-grid { grid-template-columns: repeat(2, 1fr); }
+            .mission-header { flex-direction: column; gap: 20px; text-align: center; }
+            .mission-description { margin: 0 auto 20px; }
+            .bakery-grid { grid-template-columns: repeat(2, 1fr); }
+            .nav-container { padding: 0 2rem; }
+            .sub-nav { display: none; }
+        }
+
+        @media (max-width: 650px) {
+            .bakery-grid, .impact-grid { grid-template-columns: 1fr; }
+            .main-heading { font-size: 2.2rem; }
+            .nav-container { padding: 0 1rem; }
+            #map { height: 350px; }
+        }
+        /* --- FOOTER SECTION --- */
+footer {
+    background: #000;
+    color: #fff;
+    padding: 80px 0 30px 0;
+    font-family: var(--font-main);
+}
+
+.footer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 4rem;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 50px;
+}
+
+.footer-brand .footer-logo {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    display: block;
+    color: #fff;
+    text-decoration: none;
+}
+
+.footer-brand p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.6);
+    max-width: 300px;
+}
+
+.footer-col h4 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+    color: #fff;
+}
+
+.footer-col ul {
+    list-style: none;
+}
+
+.footer-col ul li {
+    margin-bottom: 12px;
+}
+
+.footer-col ul li a {
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+.footer-col ul li a:hover {
+    color: #fff;
+    padding-left: 5px;
+}
+
+.footer-contact-info {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-bottom {
+    max-width: 1400px;
+    margin: 80px auto 0 auto;
+    padding: 30px 4rem 0 4rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.4);
+}
+
+.social-links {
+    display: flex;
+    gap: 20px;
+}
+
+.social-links a {
+    color: #fff;
+    font-size: 1.2rem;
+    opacity: 0.6;
+    transition: 0.3s;
+}
+
+.social-links a:hover {
+    opacity: 1;
+    transform: translateY(-3px);
+}
+
+@media (max-width: 1024px) {
+    .footer-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 650px) {
+    .footer-container {
+        grid-template-columns: 1fr;
+        padding: 0 2rem;
+    }
+    .footer-bottom {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <header class="hero-section">
+        <video autoplay muted loop playsinline class="video-bg">
+            <source src="restaurant.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+        
+        <nav class="navbar" id="mainNavbar">
+            <div class="nav-container">
+                <div class="nav-left">
+                    <i class="fas fa-bars"></i>
+                    <span>Menu</span>
+                </div>
+
+                <a href="#" class="logo-section">
+                    <div class="logo-box">
+                        <i class="fas fa-utensils" style="font-size: 16px; color: #000;"></i>
+                    </div>
+                    <span class="logo-text">GO</span>
+                </a>
+
+                <div class="nav-right">
+                    <a href="#" class="btn-login">Connexion</a>
+                </div>
+            </div>
+
+            <div class="sub-nav">
+                <a href="#">Restaurants</a>
+                <a href="#">Spécialités</a>
+                <a href="#">Livreurs</a>
+                <a href="#">Inscription</a>
+            </div>
+        </nav>
+
+        <div class="hero-content">
+            <p style="font-family: var(--font-serif); font-style: italic; font-size: 1.5rem; margin-bottom: 10px;">L'art de la haute gastronomie</p>
+            <h1 class="hero-title">Gourmet Live</h1>
+            <p style="letter-spacing: 8px; text-transform: uppercase; font-size: 1.1rem;">L'excellence livrée à votre porte</p>
+        </div>
+    </header>
+
+    <section class="agro-mission">
+        <div class="container">
+            <div class="mission-header">
+                <div class="mission-title-block">
+                    <span class="badge-pill">L'Agriculture Panafricaine IA</span>
+                    <h2 class="main-heading">Apporter la <br><span class="gradient-text-green">Technologie</span> <br>à l'Agriculture</h2>
+                </div>
+                <div class="mission-text-block">
+                    <p class="mission-description">
+                        Nous autonomisons les agriculteurs et les entreprises avec des solutions IA intelligentes pour bâtir un avenir agricole résilient et souverain.
+                    </p>
+                    <a href="#" class="btn-learn-more">
+                        En savoir plus 
+                        <span class="arrow-circle">
+                            <span class="material-symbols-outlined" style="font-size: 20px;">north_east</span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="impact-grid">
+                <div class="impact-card image-card">
+                    <img src="r1.jpg" alt="Livreur">
+                </div>
+                
+                <div class="impact-card stats-card gray-light">
+                    <div class="stat-number">+30%</div>
+                    <div class="stat-content">
+                        <h3>Pilier Économique</h3>
+                        <p>L'agriculture représente plus de 30% du PIB sur le continent.</p>
+                    </div>
+                </div>
+
+                <div class="impact-card image-card">
+                    <img src="r3.jpg" alt="Récolte">
+                </div>
+
+                <div class="impact-card stats-card green-gradient-card">
+                    <div class="stat-number">-30%</div>
+                    <div class="stat-content">
+                        <h3>Zéro Gaspillage</h3>
+                        <p>Réduire de 30% les pertes post-récoltes grâce à l'IA.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="bakery-grid">
+        <div class="pastry-card">
+            <div class="image-container">
+                <img src="p1.jpg" class="pastry-image" alt="Pizza">
+                <div class="overlay-voir-plus">
+                    <p>Pizza Gourmet</p>
+                    <a href="#" class="btn-plus">Déguster</a>
+                </div>
+            </div>
+        </div>   
+
+        <div class="pastry-card">
+            <div class="image-container">
+                <img src="t1.jpg" class="pastry-image" alt="Poisson">
+                <div class="overlay-voir-plus">
+                    <p>Saumon Royal</p>
+                    <a href="#" class="btn-plus">Déguster</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="pastry-card">
+            <div class="image-container">
+                <img src="b1.jpg" class="pastry-image" alt="Thiep" >
+                <div class="overlay-voir-plus">
+                    <p>Thieboudienne</p>
+                    <a href="#" class="btn-plus">Déguster</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="pastry-card">
+            <div class="image-container">
+                <img src="t2.jpg" class="pastry-image" alt="Alloco">
+                <div class="overlay-voir-plus">
+                    <p>Poisson Aloco</p>
+                    <a href="#" class="btn-plus">Déguster</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="pastry-card">
+            <div class="image-container">
+                <img src="f.png" class="pastry-image" alt="Choukouya">
+                <div class="overlay-voir-plus">
+                    <p>Choukouya</p>
+                    <a href="#" class="btn-plus">Déguster</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="pastry-card">
+            <div class="image-container">
+                <img src="e.png" class="pastry-image" alt="Riz Rouge">
+                <div class="overlay-voir-plus">
+                    <p>Riz Rouge</p>
+                    <a href="#" class="btn-plus">Déguster</a>
+                </div>
+            </div>
+        </div>
+    </main>
+<section class="faq-section">
+    <h2>Questions Fréquentes</h2>
+    <div class="faq-container">
+        
+        <div class="faq-item">
+            <button class="faq-question">
+                VOS PRODUITS CONVIENNENT-ILS AUX PERSONNES ALLERGIQUES AUX NOIX ?
+                <i class="fas fa-chevron-down faq-icon"></i>
+            </button>
+            <div class="faq-answer">
+                <p>Bien que nous prenions des précautions extrêmes, nos produits sont fabriqués dans un atelier manipulant quotidiennement des fruits à coque.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                EST-CE QUE TOUS LES PRODUITS GOURMET SONT ADAPTÉS AUX VÉGÉTALIENS ?
+                <i class="fas fa-chevron-down faq-icon"></i>
+            </button>
+            <div class="faq-answer">
+                <p>Nous proposons une sélection "Végé-Gourmet" dédiée. Les ingrédients sont précisés sur chaque fiche produit pour une transparence totale.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                PUIS-JE COMMANDER EN LIGNE ET RÉCUPÉRER MA COMMANDE EN BOUTIQUE ?
+                <i class="fas fa-chevron-down faq-icon"></i>
+            </button>
+            <div class="faq-answer">
+                <p>Oui, notre service "Click & Collect" est disponible dans tous nos points de vente GourmetLive en Côte d'Ivoire.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                OÙ SONT FABRIQUÉS VOS PRODUITS ?
+                <i class="fas fa-chevron-down faq-icon"></i>
+            </button>
+            <div class="faq-answer">
+                <p>Tous nos plats sont cuisinés avec passion dans nos cuisines centrales situées à Abidjan, à partir de produits frais et locaux.</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+    <section class="map-section">
+        <div class="map-header">
+            <h2>Restaurants à proximité</h2>
+            <a href="#">Afficher toutes les villes (+ de 10)</a>
+        </div>
+        <div id="map"></div>
+    </section>
+<footer>
+    <div class="footer-container">
+        <div class="footer-brand">
+            <a href="#" class="footer-logo">Gourmet Live</a>
+            <p>L'excellence logistique au service de votre quotidien. Une vision multi-catégories pour connecter clients, commerçants et coursiers à travers une expérience unique.</p>
+        </div>
+
+        <div class="footer-col">
+            <h4>Nos Services</h4>
+            <ul>
+                <li><a href="#">Livraison de Nourriture</a></li>
+                <li><a href="#">Colis & Objets</a></li>
+                <li><a href="#">Courses Quotidiennes</a></li>
+                <li><a href="#">Meubles & Volume</a></li>
+                <li><a href="#">Particulier à Particulier</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Plateforme</h4>
+            <ul>
+                <li><a href="#">Devenir Partenaire</a></li>
+                <li><a href="#">Rejoindre les Coursiers</a></li>
+                <li><a href="#">Dashboard Admin</a></li>
+                <li><a href="#">Aide & FAQ</a></li>
+                <li><a href="#">Mentions Légales</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Contact</h4>
+            <div class="footer-contact-info">
+                <span class="material-symbols-outlined" style="font-size: 18px;">person</span>
+                Arouna Ouattara
+            </div>
+            <div class="footer-contact-info">
+                <span class="material-symbols-outlined" style="font-size: 18px;">phone</span>
+                +225 01 02 52 88 48
+            </div>
+            <div class="footer-contact-info">
+                <span class="material-symbols-outlined" style="font-size: 18px;">mail</span>
+                ouatt0767@gmail.com
+            </div>
+            <div class="footer-contact-info">
+                <span class="material-symbols-outlined" style="font-size: 18px;">location_on</span>
+                Abidjan, Côte d'Ivoire
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2026 Gourmet Live. Document Confidentiel – Version MVP Evolutive.</p>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+    </div>
+</footer>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initialisation de la carte centrée sur la Côte d'Ivoire
+        const map = L.map('map', {
+            scrollWheelZoom: false
+        }).setView([7.539989, -5.547080], 7);
+
+        // Design de la carte
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap'
+        }).addTo(map);
+
+        const cities = [
+            { name: "Abidjan", coords: [5.3600, -4.0083] },
+            { name: "Yamoussoukro", coords: [6.8276, -5.2893] },
+            { name: "Bouaké", coords: [7.6897, -5.0315] },
+            { name: "San-Pédro", coords: [4.7485, -6.6363] },
+            { name: "Korhogo", coords: [9.4580, -5.6295] },
+            { name: "Man", coords: [7.4125, -7.5538] },
+            { name: "Daloa", coords: [6.8774, -6.4502] }
+        ];
+
+        const blackIcon = L.divIcon({
+            className: 'custom-div-icon',
+            html: "<div style='background-color:black; width:12px; height:12px; border-radius:50%; border:2px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.3);'></div>",
+            iconSize: [12, 12],
+            iconAnchor: [6, 6]
+        });
+
+        cities.forEach(city => {
+            L.marker(city.coords, { icon: blackIcon })
+                .addTo(map)
+                .bindPopup(`<b>${city.name}</b><br>GourmetLive est ici !`);
+        });
+
+        // Gestion du menu au scroll
+        const nav = document.getElementById('mainNavbar');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Correction pour s'assurer que Leaflet calcule bien les dimensions après le rendu
+        window.onload = () => { map.invalidateSize(); };
+    </script>
+</body>
+</html>
