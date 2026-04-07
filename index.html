@@ -796,6 +796,97 @@ footer {
 .reveal-delay-1 { transition-delay: 0.1s; }
 .reveal-delay-2 { transition-delay: 0.2s; }
 .reveal-delay-3 { transition-delay: 0.3s; }
+
+/* --- CHATBOT FLOTTANT --- */
+#chatbot-launcher {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background: #000;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    z-index: 3000;
+    transition: 0.3s;
+}
+
+#chatbot-launcher:hover { transform: scale(1.1); }
+
+#chat-window {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    width: 350px;
+    height: 450px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 15px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    display: none; /* Caché par défaut */
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 3000;
+}
+
+.chat-header {
+    background: #000;
+    color: #fff;
+    padding: 20px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-body {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: #fcfcfc;
+}
+
+.message {
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    max-width: 80%;
+}
+
+.bot { background: #eee; align-self: flex-start; color: #000; border-bottom-left-radius: 2px; }
+.user { background: #000; align-self: flex-end; color: #fff; border-bottom-right-radius: 2px; }
+
+.chat-footer {
+    padding: 15px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+}
+
+.chat-footer input {
+    flex: 1;
+    border: 1px solid #eee;
+    padding: 10px;
+    border-radius: 5px;
+    outline: none;
+}
+
+.chat-footer button {
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
     </style>
 </head>
 <body>
@@ -1112,6 +1203,23 @@ footer {
         </div>
     </div>
 </footer>
+<div id="chatbot-launcher">
+    <span class="material-symbols-outlined">forum</span>
+</div>
+
+<div id="chat-window">
+    <div class="chat-header">
+        <span>Go Foods Assistant</span>
+        <span id="close-chat" style="cursor:pointer" class="material-symbols-outlined">close</span>
+    </div>
+    <div class="chat-body" id="chat-content">
+        <div class="message bot">Bonjour ! Comment puis-je vous aider aujourd'hui ?</div>
+    </div>
+    <div class="chat-footer">
+        <input type="text" id="chat-input" placeholder="Écrivez votre message...">
+        <button id="send-chat"><i class="fas fa-paper-plane"></i></button>
+    </div>
+</div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
 
@@ -1161,6 +1269,46 @@ footer {
 
         // Correction pour s'assurer que Leaflet calcule bien les dimensions après le rendu
         window.onload = () => { map.invalidateSize(); };
+
+
+        // --- LOGIQUE DU CHATBOT ---
+const launcher = document.getElementById('chatbot-launcher');
+const chatWindow = document.getElementById('chat-window');
+const closeChat = document.getElementById('close-chat');
+const sendBtn = document.getElementById('send-chat');
+const chatInput = document.getElementById('chat-input');
+const chatContent = document.getElementById('chat-content');
+
+// Ouvrir / Fermer
+launcher.onclick = () => chatWindow.style.display = 'flex';
+closeChat.onclick = () => chatWindow.style.display = 'none';
+
+// Envoyer un message
+function sendMessage() {
+    const text = chatInput.value.trim();
+    if (text !== "") {
+        // Message utilisateur
+        const userMsg = document.createElement('div');
+        userMsg.className = 'message user';
+        userMsg.innerText = text;
+        chatContent.appendChild(userMsg);
+        
+        chatInput.value = "";
+        chatContent.scrollTop = chatContent.scrollHeight;
+
+        // Réponse automatique simple
+        setTimeout(() => {
+            const botMsg = document.createElement('div');
+            botMsg.className = 'message bot';
+            botMsg.innerText = "Merci pour votre message. Un agent de Gourmet Live vous répondra d'ici peu !";
+            chatContent.appendChild(botMsg);
+            chatContent.scrollTop = chatContent.scrollHeight;
+        }, 1000);
+    }
+}
+
+sendBtn.onclick = sendMessage;
+chatInput.onkeypress = (e) => { if(e.key === 'Enter') sendMessage(); };
         
     </script>
 </body>
