@@ -776,7 +776,7 @@ footer {
     right: 30px;
     width: 60px;
     height: 60px;
-    background: #000;
+    background: #8CC63F;
     color: #fff;
     border-radius: 50%;
     display: flex;
@@ -807,7 +807,7 @@ footer {
 }
 
 .chat-header {
-    background: #000;
+    background: #8CC63F;
     color: #fff;
     padding: 20px;
     font-weight: 700;
@@ -852,7 +852,7 @@ footer {
 }
 
 .chat-footer button {
-    background: #000;
+    background: #8CC63F;
     color: #fff;
     border: none;
     padding: 10px 15px;
@@ -1026,6 +1026,43 @@ footer {
 .navbar.scrolled + .nav-card-container {
     top: 80px;
 }
+/* --- STYLE DU BOUTON CONNEXION RESPONSIVE --- */
+
+/* Par défaut (Grand écran), on cache l'icône personne */
+.btn-icon {
+    display: none !important;
+}
+
+/* Sur petit écran (Mobile / Tablette) */
+@media (max-width: 768px) {
+    /* On cache le texte "Connexion" */
+    .btn-text {
+        display: none;
+    }
+
+    /* On affiche l'icône personne */
+    .btn-icon {
+        display: inline-block !important;
+        font-size: 1.2rem;
+    }
+
+    /* On transforme le bouton en petit cercle/carré compact */
+    .btn-login {
+        padding: 10px !important;
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50% !important; /* Devient rond sur mobile */
+    }
+    
+    /* On réduit l'espace entre le logo et le bouton sur mobile */
+    .nav-container {
+        padding: 0 1.5rem;
+        gap: 10px;
+    }
+}
     </style>
 </head>
 <body>
@@ -1063,14 +1100,17 @@ footer {
             <img src="go food.png" alt="Logo Sombre" class="header-logo logo-color">
         </a>
 
-        <div class="nav-right">
-            <a href="#" class="btn-login">Connexion</a>
-        </div>
+       <div class="nav-right">
+    <a href="#" class="btn-login">
+        <span class="btn-text">Connexion</span>
+        <i class="fas fa-user btn-icon"></i>
+    </a>
+</div>
     </div>
 </nav>
         <div class="hero-content">
             <p style="font-family: var(--font-serif); font-style: italic; font-size: 1.5rem; margin-bottom: 10px;">L'art de la haute gastronomie</p>
-            <h1 class="hero-title">Go Foods Live</h1>
+            <h1 class="hero-title">Go Food Live</h1>
             <p style="letter-spacing: 8px; text-transform: uppercase; font-size: 1.1rem;">L'excellence livrée à votre porte</p>
         </div>
     </header>
@@ -1367,22 +1407,24 @@ footer {
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
 
-     const openBtn = document.getElementById('openMenu');
+        // --- LOGIQUE DU MENU LATÉRAL ---
+const openBtn = document.getElementById('openMenu');
 const closeBtn = document.getElementById('closeMenu');
 const sideMenu = document.getElementById('sideMenu');
 
-openBtn.onclick = (e) => {
-    e.stopPropagation(); // Empêche la fermeture immédiate
-    sideMenu.classList.toggle('active');
+// Ouvrir le menu au clic sur "Menu"
+openBtn.onclick = () => {
+    sideMenu.classList.add('active');
 };
 
+// Fermer le menu au clic sur la croix
 closeBtn.onclick = () => {
     sideMenu.classList.remove('active');
 };
 
-// Ferme la carte si on clique n'importe où ailleurs sur l'écran
-document.onclick = (event) => {
-    if (!sideMenu.contains(event.target) && event.target !== openBtn) {
+// Fermer le menu si on clique en dehors du contenu blanc
+window.onclick = (event) => {
+    if (event.target == sideMenu) {
         sideMenu.classList.remove('active');
     }
 };
