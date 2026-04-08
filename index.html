@@ -68,7 +68,6 @@
             z-index: 1000;
             padding: 2.5rem 0;
             transition: var(--transition);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
             background: transparent;
         }
 
@@ -92,7 +91,7 @@
             display: flex; 
             align-items: center; 
             gap: 15px; 
-            font-size: 0.75rem; 
+            font-size: 1rem; 
             text-transform: uppercase; 
             letter-spacing: 2px; 
             font-weight: 700; 
@@ -103,34 +102,7 @@
 
         .navbar.scrolled .nav-left { color: #000; }
         
-        .logo-section { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            text-decoration: none;
-        }
-        
-        .logo-box { 
-            background: var(--white); 
-            padding: 8px 10px; 
-            border-radius: 2px; 
-            display: flex;
-            transition: 0.3s;
-        }
 
-        .navbar.scrolled .logo-box { background: #000; }
-        .navbar.scrolled .logo-box i { color: #fff !important; }
-
-        .logo-text { 
-            font-family: var(--font-main);
-            font-weight: 800; 
-            font-size: 1.2rem; 
-            letter-spacing: 6px; 
-            color: var(--white); 
-            margin-top: 8px;
-            text-transform: uppercase;
-            transition: color 0.3s;
-        }
 
         .navbar.scrolled .logo-text { color: #000; }
 
@@ -887,6 +859,173 @@ footer {
     border-radius: 5px;
     cursor: pointer;
 }
+
+/* --- LOGO SANS FOND ET ADAPTATIF --- */
+.logo-section {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    background: transparent !important; /* Force la transparence */
+}
+
+.header-logo {
+    height: 100px; /* Taille un peu plus grande pour la visibilité */
+    width: auto;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    object-fit: contain;
+    /* On ajoute une ombre subtile pour que le logo soit visible sur les images claires de la vidéo */
+    filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.2)); 
+}
+
+/* --- LOGO AU SCROLL (Header blanc) --- */
+.navbar.scrolled .header-logo {
+    height: 100px; /* Réduction élégante au scroll */
+    filter: none; /* On enlève l'ombre portée sur fond blanc */
+}
+
+/* Sécurité pour supprimer les anciens restes de carrés blancs */
+.logo-box {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    box-shadow: none !important;
+}
+/* --- LOGO CONTENEUR --- */
+.logo-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 100px; /* Force une hauteur pour éviter le saut au scroll */
+    transition: all 0.4s ease;
+}
+
+.header-logo {
+    height: 80px; /* Taille de ton logo */
+    width: auto;
+    object-fit: contain;
+    transition: all 0.4s ease;
+    position: absolute; /* Permet de superposer les deux images proprement */
+}
+
+/* --- LOGIQUE D'AFFICHAGE --- */
+.logo-color {
+    opacity: 0; /* Caché par défaut */
+    visibility: hidden;
+}
+
+.logo-white {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* --- ÉTAT AU SCROLL --- */
+.navbar.scrolled .logo-link {
+    height: 60px; /* Réduit la barre au scroll */
+}
+
+.navbar.scrolled .logo-white {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.navbar.scrolled .logo-color {
+    opacity: 1;
+    visibility: visible;
+    height: 70px; /* Taille du logo légèrement réduite au scroll */
+}
+
+/* Nettoyage des anciens styles */
+.logo-box, .logo-section {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+/* --- FLOATING NAV CARD --- */
+.nav-card-container {
+    position: fixed;
+    top: 100px; /* Aligné sous la navbar */
+    left: 40px;
+    width: 280px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(15px); /* Effet flou moderne */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    z-index: 2500;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Quand la carte est active */
+.nav-card-container.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.nav-card-content {
+    padding: 20px;
+}
+
+.nav-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 800;
+    color: #888;
+}
+
+#closeMenu {
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+#closeMenu:hover { color: #000; }
+
+.nav-card-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.nav-card-links a {
+    text-decoration: none;
+    color: #1A1A1A;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 12px 15px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: 0.3s;
+}
+
+.nav-card-links a i {
+    font-size: 14px;
+    width: 20px;
+    color: #8CC63F; /* Le vert de ton logo */
+}
+
+.nav-card-links a:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: translateX(5px);
+}
+
+/* Ajustement Navbar Scroll */
+.navbar.scrolled + .nav-card-container {
+    top: 80px;
+}
     </style>
 </head>
 <body>
@@ -897,33 +1036,38 @@ footer {
         </video>
         <div class="hero-overlay"></div>
         
-        <nav class="navbar" id="mainNavbar">
-            <div class="nav-container">
-                <div class="nav-left">
-                    <i class="fas fa-bars"></i>
-                    <span>Menu</span>
-                </div>
+     <div id="sideMenu" class="nav-card-container">
+    <div class="nav-card-content">
+        <div class="nav-card-header">
+            <span>Navigation</span>
+            <span id="closeMenu" class="material-symbols-outlined">close</span>
+        </div>
+        <div class="nav-card-links">
+            <a href="#"><i class="fas fa-utensils"></i> Restaurants</a>
+            <a href="#"><i class="fas fa-star"></i> Spécialités</a>
+            <a href="#"><i class="fas fa-bicycle"></i> Livreurs</a>
+            <a href="#"><i class="fas fa-edit"></i> Inscription</a>
+        </div>
+    </div>
+</div>
 
-                <a href="#" class="logo-section">
-                    <div class="logo-box">
-                        <i class="fas fa-utensils" style="font-size: 16px; color: #000;"></i>
-                    </div>
-                    <span class="logo-text">GO</span>
-                </a>
+<nav class="navbar" id="mainNavbar">
+    <div class="nav-container">
+        <div class="nav-left" id="openMenu">
+            <i class="fas fa-bars"></i>
+            <span>Menu</span>
+        </div>
 
-                <div class="nav-right">
-                    <a href="#" class="btn-login">Connexion</a>
-                </div>
-            </div>
+        <a href="#" class="logo-link">
+            <img src="logo_go_food.png" alt="Logo Clair" class="header-logo logo-white">
+            <img src="go food.png" alt="Logo Sombre" class="header-logo logo-color">
+        </a>
 
-            <div class="sub-nav">
-                <a href="#">Restaurants</a>
-                <a href="#">Spécialités</a>
-                <a href="#">Livreurs</a>
-                <a href="#">Inscription</a>
-            </div>
-        </nav>
-
+        <div class="nav-right">
+            <a href="#" class="btn-login">Connexion</a>
+        </div>
+    </div>
+</nav>
         <div class="hero-content">
             <p style="font-family: var(--font-serif); font-style: italic; font-size: 1.5rem; margin-bottom: 10px;">L'art de la haute gastronomie</p>
             <h1 class="hero-title">Go Foods Live</h1>
@@ -931,16 +1075,16 @@ footer {
         </div>
     </header>
 
-    <section class="agro-mission">
+<section class="agro-mission">
     <div class="container">
         <div class="mission-header">
             <div class="mission-title-block">
-                <span class="badge-pill">Vision Go Foods 2026</span>
+                <span class="badge-pill">Vision Go 2026</span>
                 <h2 class="main-heading">Connecter l'Écosystème <br><span class="gradient-text-green">Logistique</span> <br>Ivoirien</h2>
             </div>
             <div class="mission-text-block">
                 <p class="mission-description">
-                    Porté par <strong>OUATTARA Arouna</strong>, Gourmet Live est une plateforme évolutive conçue pour connecter efficacement clients, commerçants et coursiers à travers une solution technologique de pointe.
+                 Go  est une plateforme évolutive conçue pour connecter efficacement clients, commerçants et coursiers à travers une solution technologique de pointe.
                 </p>
                 <a href="#" class="btn-learn-more">
                     Découvrir le projet 
@@ -1002,7 +1146,7 @@ footer {
 
         <div class="pastry-card">
             <div class="image-container">
-                <img src="b1.jpg" class="pastry-image" alt="burger" >
+                <img src="Thiep.png" class="pastry-image" alt="burger" >
                 <div class="overlay-voir-plus">
                     <p>Burger</p>
                     <a href="#" class="btn-plus">Déguster</a>
@@ -1022,7 +1166,7 @@ footer {
 
         <div class="pastry-card">
             <div class="image-container">
-                <img src="f.png" class="pastry-image" alt="Choukouya">
+                <img src="poison_aloco.png" class="pastry-image" alt="Choukouya">
                 <div class="overlay-voir-plus">
                     <p>Poulet</p>
                     <a href="#" class="btn-plus">Déguster</a>
@@ -1032,7 +1176,7 @@ footer {
 
         <div class="pastry-card">
             <div class="image-container">
-                <img src="e.png" class="pastry-image" alt="Riz Rouge">
+                <img src="Choukouya.png" class="pastry-image" alt="Riz Rouge">
                 <div class="overlay-voir-plus">
                     <p>Entrée</p>
                     <a href="#" class="btn-plus">Déguster</a>
@@ -1223,7 +1367,25 @@ footer {
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
 
-        
+     const openBtn = document.getElementById('openMenu');
+const closeBtn = document.getElementById('closeMenu');
+const sideMenu = document.getElementById('sideMenu');
+
+openBtn.onclick = (e) => {
+    e.stopPropagation(); // Empêche la fermeture immédiate
+    sideMenu.classList.toggle('active');
+};
+
+closeBtn.onclick = () => {
+    sideMenu.classList.remove('active');
+};
+
+// Ferme la carte si on clique n'importe où ailleurs sur l'écran
+document.onclick = (event) => {
+    if (!sideMenu.contains(event.target) && event.target !== openBtn) {
+        sideMenu.classList.remove('active');
+    }
+};
         // Initialisation de la carte centrée sur la Côte d'Ivoire
         const map = L.map('map', {
             scrollWheelZoom: false
